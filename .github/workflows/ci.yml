@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t docker-react -f Dockerfile.dev .
+
+      - name: Run tests
+        run: docker run -e CI=true docker-react npm run test -- --watchAll=false
